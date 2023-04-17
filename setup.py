@@ -52,6 +52,8 @@ try:
 except Exception:
     pass
 
+version += "+torch" + torch.__version__.replace("+", ".")
+
 
 def write_version_file():
     version_path = os.path.join(cwd, "groundingdino", "version.py")
@@ -203,7 +205,7 @@ if __name__ == "__main__":
 
     setup(
         name="groundingdino",
-        version="0.1.0",
+        version=version,
         author="International Digital Economy Academy, Shilong Liu",
         url="https://github.com/IDEA-Research/GroundingDINO",
         description="open-set object detector",
