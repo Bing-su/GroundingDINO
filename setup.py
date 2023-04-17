@@ -40,6 +40,8 @@ try:
 except Exception:
     pass
 
+version += "+torch" + torch.__version__.replace("+", ".")
+
 
 def write_version_file():
     version_path = os.path.join(cwd, "groundingdino", "version.py")
@@ -70,7 +72,7 @@ def get_extensions():
     extra_compile_args = {"cxx": []}
     define_macros = []
 
-    if torch.cuda.is_available() and CUDA_HOME is not None:
+    if CUDA_HOME is not None:
         print("Compiling with CUDA")
         extension = CUDAExtension
         sources += source_cuda
@@ -191,7 +193,7 @@ if __name__ == "__main__":
 
     setup(
         name="groundingdino",
-        version="0.1.0",
+        version=version,
         author="International Digital Economy Academy, Shilong Liu",
         url="https://github.com/IDEA-Research/GroundingDINO",
         description="open-set object detector",
