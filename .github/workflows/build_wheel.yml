@@ -29,17 +29,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up python
+      - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
-          pip install -U setuptools wheel ninja
+          pip install -U setuptools wheel build ninja
           ${{ matrix.config.torch-command }}
 
-      - name: Set up cudatoolkit
+      - name: Set up cudatoolkit ${{ matrix.config.cuda-version }}
         uses: Jimver/cuda-toolkit@v0.2.10
         id: cuda-toolkit
         with:
@@ -53,7 +53,7 @@ jobs:
           CUDA_HOME: ${{ steps.cuda-toolkit.outputs.CUDA_PATH }}
           TORCH_CUDA_ARCH_LIST: ${{ matrix.config.arch_list }}
         run: |
-          python setup.py bdist_wheel
+          python -m build --no-isolation --wheel
 
       - name: Upload wheel
         uses: actions/upload-artifact@v3
