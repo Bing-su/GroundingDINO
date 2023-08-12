@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [ubuntu-20.04, windows-2019]
+        os: [ubuntu-latest, windows-latest]
         python-version: ["3.9", "3.10", "3.11"]
         config:
           - torch-version: "2.0.1"
@@ -36,10 +36,11 @@ jobs:
           ${{ matrix.config.torch-command }}
 
       - name: Set up cudatoolkit ${{ matrix.config.cuda-version }}
-        uses: Jimver/cuda-toolkit@v0.2.10
+        uses: Jimver/cuda-toolkit@v0.2.11
         id: cuda-toolkit
         with:
           cuda: ${{ matrix.config.cuda-version }}
+          use-github-cache: false
 
       - run: echo "Installed cuda version is → ${{ steps.cuda-toolkit.outputs.cuda }}"
       - run: echo "Cuda install location → ${{ steps.cuda-toolkit.outputs.CUDA_PATH }}"
@@ -54,5 +55,4 @@ jobs:
       - name: Upload wheel
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.os }}-py${{ matrix.python-version }}-torch${{ matrix.config.torch-version }}-cu${{ matrix.config.cuda-version }}
           path: dist/*.whl
