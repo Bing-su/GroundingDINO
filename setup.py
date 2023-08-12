@@ -23,13 +23,15 @@
 import glob
 import os
 import subprocess
+from datetime import datetime
 
 import torch
 from setuptools import find_packages, setup
 from torch.utils.cpp_extension import CUDA_HOME, CppExtension, CUDAExtension
 
 # groundingdino version info
-version = "0.1.0"
+version = datetime.utcnow().strftime("%y.%m.%d")
+version += "+torch" + torch.__version__.replace("+", ".")
 package_name = "groundingdino"
 cwd = os.path.dirname(os.path.abspath(__file__))
 
@@ -39,9 +41,6 @@ try:
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=cwd).decode("ascii").strip()
 except Exception:
     pass
-
-version += "+torch" + torch.__version__.replace("+", ".")
-
 
 def write_version_file():
     version_path = os.path.join(cwd, "groundingdino", "version.py")
